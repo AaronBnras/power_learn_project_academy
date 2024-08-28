@@ -70,7 +70,14 @@ void main() {
 }
 
 bool checkWin(List<String> board) {
-  return true;
+ for (int i = 0; i < 9; i += 3){
+  if (board[i] != ' ' && board[i] == board[i+1] && board[i] == board[i+2]) {
+
+    return true;
+    
+  }
+ }
+ return false;
 }
 
 void printBoard(List<String> board) {
