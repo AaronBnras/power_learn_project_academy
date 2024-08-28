@@ -2,7 +2,7 @@ import 'dart:io';
 
 void main() {
 
-  List<String> board = List.filled(9, '');
+  List<String> board = List.filled(9, ' ');
 
   bool isplayer1turn = true;
 
