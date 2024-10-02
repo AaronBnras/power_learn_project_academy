@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation Exercise</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: -8px;
+            margin-bottom: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Registration Form</h2>
+    <form id="registrationForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" required>
+        <div id="nameError" class="error hidden">Please enter your name.</div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+        <div id="emailError" class="error hidden">Please enter a valid email.</div>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <div id="passwordError" class="error hidden">Password must be at least 8 characters long.</div>
+
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" required>
+        <div id="confirmPasswordError" class="error hidden">Passwords do not match.</div>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" required>
+        <div id="ageError" class="error hidden">Please enter a valid age (18-100).</div>
+
+        <label>Gender:</label>
+        <label><input type="radio" name="gender" value="male" required> Male</label>
+        <label><input type="radio" name="gender" value="female" required> Female</label>
+        <div id="genderError" class="error hidden">Please select your gender.</div>
+
+        <label for="country">Country:</label>
+        <select id="country" required>
+            <option value="">Select your country</option>
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+            <option value="uk">United Kingdom</option>
+        </select>
+        <div id="countryError" class="error hidden">Please select your country.</div>
+
+        <label>
+            <input type="checkbox" id="terms" required> I agree to the Terms and Conditions
+        </label>
+        <div id="termsError" class="error hidden">You must agree to the terms.</div>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+<div class="form-container">
+    <h2>Login Form</h2>
+    <form id="loginForm">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" required>
+        <div id="loginEmailError" class="error hidden">Please enter a valid email.</div>
+
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" required>
+        <div id="loginPasswordError" class="error hidden">Please enter your password.</div>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('registrationForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        clearErrors(); // Clear previous error messages
+
+        let isValid = true;
+
+        // Name validation
+        const name = document.getElementById('name').value;
+        if (name.trim() === '') {
+            document.getElementById('nameError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Email validation
+        const email = document.getElementById('email').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            document.getElementById('emailError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Password validation
+        const password = document.getElementById('password').value;
+        if (password.length < 8) {
+            document.getElementById('passwordError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Confirm Password validation
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (password !== confirmPassword) {
+            document.getElementById('confirmPasswordError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Age validation
+        const age = parseInt(document.getElementById('age').value);
+        if (isNaN(age) || age < 18 || age > 100) {
+            document.getElementById('ageError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Gender validation
+        const gender = document.querySelector('input[name="gender"]:checked');
+        if (!gender) {
+            document.getElementById('genderError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Country validation
+        const country = document.getElementById('country').value;
+        if (country === '') {
+            document.getElementById('countryError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Terms validation
+        const terms = document.getElementById('terms').checked;
+        if (!terms) {
+            document.getElementById('termsError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // If valid, you can submit the form (or handle the data as needed)
+        if (isValid) {
+            alert('Registration successful!');
+            // Here you can proceed with form submission or further processing.
+        }
+    });
+
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+        clearLoginErrors(); // Clear previous error messages
+
+        let isValid = true;
+
+        // Login Email validation
+        const loginEmail = document.getElementById('loginEmail').value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(loginEmail)) {
+            document.getElementById('loginEmailError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // Login Password validation
+        const loginPassword = document.getElementById('loginPassword').value;
+        if (loginPassword.trim() === '') {
+            document.getElementById('loginPasswordError').classList.remove('hidden');
+            isValid = false;
+        }
+
+        // If valid, you can submit the form (or handle the data as needed)
+        if (isValid) {
+            alert('Login successful!');
+            // Here you can proceed with form submission or further processing.
+        }
+    });
+
+    function clearErrors() {
+        const errorElements = document.querySelectorAll('.error');
+        errorElements.forEach(error => error.classList.add('hidden'));
+    }
+
+    function clearLoginErrors() {
+        const loginErrorElements = document.querySelectorAll('#loginForm .error');
+        loginErrorElements.forEach(error => error.classList.add('hidden'));
+    }
+</script>
+
+</body>
+</html>
